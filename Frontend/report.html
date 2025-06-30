@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Home Utility Usage Report</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+  <div class="form-container report-container" id="reportSection">
+    <h2>Home Utility Usage Report</h2>
+
+    <canvas id="pieChart"></canvas>
+    <canvas id="barChart"></canvas>
+    <canvas id="lineChart"></canvas>
+
+    <div class="btn-row">
+      <a href="index.html" class="btn">⬅️ Back to Home</a>
+      <button onclick="downloadPDF()" class="btn">📥 Download PDF</button>
+    </div>
+  </div>
+
+<script>
+    window.onload = function () {
+        // Pie Chart
+        new Chart(document.getElementById("pieChart"), {
+            type: 'pie',
+            data: {
+                labels: ['Electricity', 'Water', 'Gas'],
+                datasets: [{
+                    data: [40, 35, 25],
+                    backgroundColor: ['#f39c12', '#3498db', '#2ecc71'],
+                }]
+            }
+        });
+
+        // Bar Chart
+        new Chart(document.getElementById("barChart"), {
+            type: 'bar',
+            data: {
+                labels: ['Electricity', 'Water', 'Gas'],
+                datasets: [{
+                    label: 'Money Spent (INR)',
+                    data: [1200, 700, 500],
+                    backgroundColor: ['#f39c12', '#3498db', '#2ecc71'],
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Line Chart
+        new Chart(document.getElementById("lineChart"), {
+            type: 'line',
+            data: {
+                labels: ['1st', '5th', '10th', '15th', '20th', '25th', '30th'],
+                datasets: [{
+                    label: 'Total Usage (kWh / Litres)',
+                    data: [30, 50, 40, 60, 55, 75, 70],
+                    borderColor: '#8e44ad',
+                    fill: false,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    }
+
+    // PDF Download
+    function downloadPDF() {
+        const element = document.getElementById("reportSection");
+        html2pdf().from(element).set({
+            margin: 1,
+            filename: 'Utility_Report.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        }).save();
+    }
+</script>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Utility Usage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Add Utility Usage</h2>
+        <form id="usageForm">
+            <label for="appliance">Appliance</label>
+            <input type="text" id="appliance" name="appliance" required>
+
+            <label for="utilityType">Utility Type</label>
+            <select id="utilityType" name="utilityType" onchange="updateSubUtility()">
+                <option value="Electricity">Electricity</option>
+                <option value="Water">Water</option>
+                <option value="Gas">Gas</option>
+            </select>
+
+            <div id="subUtilityRow" style="margin-top: 15px;">
+                <label for="subUtility">Usage Type</label>
+                <select id="subUtility" name="subUtility">
+                    <!-- Will be filled dynamically -->
+                </select>
+            </div>
+
+            <label for="units">Units Used</label>
+            <div class="unit-wrapper">
+                <input type="number" id="units" name="units" step="0.1" placeholder="Enter value">
+                <span id="unitLabel" class="unit-label">kWh</span>
+            </div>
+
+
+            <label for="amount">Amount (₹)</label>
+            <input type="number" id="amount" name="amount" step="0.01" required>
+
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" placeholder="Optional comments..."></textarea>
+
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function updateSubUtility() {
+            const utility = document.getElementById("utilityType").value;
+            const subUtility = document.getElementById("subUtility");
+            const unitLabel = document.getElementById("unitLabel");
+            subUtility.innerHTML = "";
+
+            let options = [];
+            let defaultUnit = "units";
+
+            if (utility === "Water") {
+                options = ["Peene ka Paani", "Nahane ka Paani", "Bartan Dhone ka", "Washing Machine"];
+                defaultUnit = "Litres";
+            } else if (utility === "Electricity") {
+                options = ["Lighting", "Cooling (Fan/AC)", "Heating (Geyser)", "Kitchen Appliances", "Computers/TV"];
+                defaultUnit = "kWh";
+            } else if (utility === "Gas") {
+                options = ["Cooking", "Heating Water", "Geyser", "Other"];
+                defaultUnit = "Cubic Metres";
+            }
+
+            options.forEach(function (item) {
+                const opt = document.createElement("option");
+                opt.value = item;
+                opt.innerText = item;
+                subUtility.appendChild(opt);
+            });
+
+            unitLabel.textContent = defaultUnit;
+        }
+
+
+        // Trigger default on page load
+        window.onload = updateSubUtility;
+    </script>
+</body>
+
+</html>
