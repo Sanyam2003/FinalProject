@@ -21,6 +21,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/usage/all").hasRole("ADMIN")              // Only ADMIN can access all usage
                         .requestMatchers("/api/auth/**").permitAll()                 // Allow register/login without login
                         .requestMatchers("/api/usage/**").permitAll()                // Allow public access to /api/usage/** endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")           // Only ADMIN can access
