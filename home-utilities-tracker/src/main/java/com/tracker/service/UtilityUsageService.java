@@ -50,4 +50,23 @@ public class UtilityUsageService {
         }
         usageRepo.deleteById(usageId);
     }
+
+    public UtilityUsage getUsageById(Long usageId) {
+        return usageRepo.findById(usageId)
+                .orElseThrow(() -> new RuntimeException("Usage not found"));
+    }
+
+    public UtilityUsage updateUsageById(Long usageId, UtilityUsage updatedUsage) {
+        UtilityUsage existing = getUsageById(usageId);
+        existing.setAppliance(updatedUsage.getAppliance());
+        existing.setNotes(updatedUsage.getNotes());
+        existing.setSubCategory(updatedUsage.getSubCategory());
+        existing.setUnitsUsed(updatedUsage.getUnitsUsed());
+        existing.setUsageCost(updatedUsage.getUsageCost());
+        existing.setUtilityType(updatedUsage.getUtilityType());
+        existing.setDate(updatedUsage.getDate());
+
+        return usageRepo.save(existing);
+    }
+
 }

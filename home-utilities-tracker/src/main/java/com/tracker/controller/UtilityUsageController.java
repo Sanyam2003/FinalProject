@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/usage")
 public class UtilityUsageController {
+
+    @Autowired
+    private UtilityUsageService utilityUsageService;
 
     @Autowired
     private UtilityUsageService usageService;
@@ -27,10 +31,28 @@ public class UtilityUsageController {
     }
 
     @PutMapping("/update/{usageId}")
-    public ResponseEntity<UtilityUsage> updateUsage(@PathVariable Long usageId, @RequestBody UtilityUsage usage) {
-        UtilityUsage updated = usageService.updateUsage(usageId, usage);
+    public ResponseEntity<?> updateUsage(
+            @PathVariable Long usageId,
+            @RequestBody UtilityUsage updatedUsage,
+            Principal principal) {
+
+        // ✅ 1. Get email of currently logged-in user
+        String loggedInEmail = principal.getName();
+
+        // ✅ 2. Check if user is authorized to update this record (admin or owner)
+        UtilityUsage existingUsage = utilityUsageService.getUsageById(usageId);
+        String ownerEmail = existingUsage.getUser().getEmail();
+
+        // ✅ 3. Allow if same user or admin
+        if (!loggedInEmail.equals(ownerEmail) && !loggedInEmail.equals("admin@example.com")) {
+            return ResponseEntity.status(403).body("Access Denied: You cannot update others' data.");
+        }
+
+        // ✅ 4. Perform update
+        UtilityUsage updated = utilityUsageService.updateUsageById(usageId, updatedUsage);
         return ResponseEntity.ok(updated);
     }
+
 
     @DeleteMapping("/delete/{usageId}")
     public ResponseEntity<Void> deleteUsage(@PathVariable Long usageId) {

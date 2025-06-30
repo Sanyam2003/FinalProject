@@ -2,6 +2,7 @@ package com.tracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,6 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/usage/all").hasRole("ADMIN")              // Only ADMIN can access all usage
                         .requestMatchers("/api/auth/**").permitAll()                 // Allow register/login without login
+                        .requestMatchers(HttpMethod.PUT, "/api/usage/update/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/usage/**").permitAll()                // Allow public access to /api/usage/** endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")           // Only ADMIN can access
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN") // USER and ADMIN both can access
