@@ -4,24 +4,21 @@ import com.tracker.model.UtilityUsage;
 import com.tracker.repository.UtilityUsageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin")
-public class AdminController {
+@RequestMapping("/api/user")
+public class UserController {
 
     @Autowired
     private UtilityUsageRepository usageRepo;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/all-usage")
-    public List<UtilityUsage> getAllUsage() {
+    @GetMapping("/usage")
+    public List<UtilityUsage> getUsage() {
         return usageRepo.findAll();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete-usage/{id}")
     public String deleteUsage(@PathVariable Long id) {
         usageRepo.deleteById(id);

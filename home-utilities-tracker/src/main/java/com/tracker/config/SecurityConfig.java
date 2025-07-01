@@ -22,12 +22,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/usage/all").hasRole("ADMIN")              // Only ADMIN can access all usage
-                        .requestMatchers("/api/auth/**").permitAll()                 // Allow register/login without login
-                        .requestMatchers(HttpMethod.PUT, "/api/usage/update/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/usage/**").permitAll()                // Allow public access to /api/usage/** endpoints
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")           // Only ADMIN can access
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN") // USER and ADMIN both can access
+                        .requestMatchers("/api/usage/all").permitAll()              // No admin, so allow all
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/usage/update/**").authenticated()
+                        .requestMatchers("/api/usage/my-usage").authenticated()
+                        .requestMatchers("/api/usage/**").permitAll()
+                        // Removed admin and admin role lines
+                        .requestMatchers("/api/user/**").authenticated()
                         .anyRequest().authenticated()                                // Everything else requires login
                 );
         return http.build();
