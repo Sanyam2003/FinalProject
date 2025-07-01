@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Utility Usage</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Add Utility Usage</h2>
+    <form th:action="@{/add-usage}" th:object="${usage}" method="post">
+      <label for="appliance">Appliance</label>
+      <input type="text" id="appliance" th:field="*{appliance}" required>
+      <label for="utilityType">Utility Type</label>
+      <select id="utilityType" th:field="*{utilityType}">
+        <option value="Electricity">Electricity</option>
+        <option value="Water">Water</option>
+        <option value="Gas">Gas</option>
+      </select>
+      <label for="subCategory">Sub Category</label>
+      <input type="text" id="subCategory" th:field="*{subCategory}" required>
+      <label for="unitsUsed">Units Used</label>
+      <input type="number" id="unitsUsed" th:field="*{unitsUsed}" step="0.1" required>
+      <label for="usageCost">Usage Cost (₹)</label>
+      <input type="number" id="usageCost" th:field="*{usageCost}" step="0.01" required>
+      <label for="date">Date</label>
+      <input type="date" id="date" th:field="*{date}" required>
+      <label for="notes">Notes</label>
+      <textarea id="notes" th:field="*{notes}" placeholder="Optional comments..."></textarea>
+      <button type="submit" class="btn">Submit</button>
+      <span th:if="${success}" style="color:green;">Usage added!</span>
+      <span th:if="${error}" style="color:red;">Failed to add usage!</span>
+    </form>
+    <a href="/">Back to Home</a>
+  </div>
+</body>
+</html>

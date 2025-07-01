@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>My Utility Usage Report</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>My Utility Usage Report</h2>
+    <table id="usageTable" border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Appliance</th>
+          <th>Utility Type</th>
+          <th>Sub Category</th>
+          <th>Units Used</th>
+          <th>Usage Cost</th>
+          <th>Date</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="usage, iterStat : ${usages}">
+          <td th:text="${usage.id}"></td>
+          <td th:if="${editId} == ${usage.id}">
+            <input type="text" th:name="'appliance_' + ${usage.id}" th:value="${usage.appliance}" form="editForm_${usage.id}" />
+          </td>
+          <td th:unless="${editId} == ${usage.id}" th:text="${usage.appliance}"></td>
+
+          <td th:if="${editId} == ${usage.id}">
+            <select th:name="'utilityType_' + ${usage.id}" form="editForm_${usage.id}">
+              <option value="Electricity" th:selected="${usage.utilityType == 'Electricity'}">Electricity</option>
+              <option value="Water" th:selected="${usage.utilityType == 'Water'}">Water</option>
+              <option value="Gas" th:selected="${usage.utilityType == 'Gas'}">Gas</option>
+            </select>
+          </td>
+          <td th:unless="${editId} == ${usage.id}" th:text="${usage.utilityType}"></td>
+
+          <td th:if="${editId} == ${usage.id}">
+            <input type="text" th:name="'subCategory_' + ${usage.id}" th:value="${usage.subCategory}" form="editForm_${usage.id}" />
+          </td>
+          <td th:unless="${editId} == ${usage.id}" th:text="${usage.subCategory}"></td>
+
+          <td th:if="${editId} == ${usage.id}">
+            <input type="number" th:name="'unitsUsed_' + ${usage.id}" th:value="${usage.unitsUsed}" step="0.1" form="editForm_${usage.id}" />
+          </td>
+          <td th:unless="${editId} == ${usage.id}" th:text="${usage.unitsUsed}"></td>
+
+          <td th:if="${editId} == ${usage.id}">
+            <input type="number" th:name="'usageCost_' + ${usage.id}" th:value="${usage.usageCost}" step="0.01" form="editForm_${usage.id}" />
+          </td>
+          <td th:unless="${editId} == ${usage.id}" th:text="${usage.usageCost}"></td>
+
+          <td th:if="${editId} == ${usage.id}">
+            <input type="date" th:name="'date_' + ${usage.id}" th:value="${usage.date}" form="editForm_${usage.id}" />
+          </td>
+          <td th:unless="${editId} == ${usage.id}" th:text="${usage.date}"></td>
+
+          <td th:if="${editId} == ${usage.id}">
+            <input type="text" th:name="'notes_' + ${usage.id}" th:value="${usage.notes}" form="editForm_${usage.id}" />
+          </td>
+          <td th:unless="${editId} == ${usage.id}" th:text="${usage.notes}"></td>
+
+          <td>
+            <form th:if="${editId} == ${usage.id}" th:id="'editForm_' + ${usage.id}" th:action="@{/report}" method="post" style="display:inline;">
+              <input type="hidden" name="editId" th:value="${usage.id}" />
+              <button type="submit" class="btn">Save</button>
+              <a th:href="@{/report}" class="btn">Cancel</a>
+            </form>
+            <form th:unless="${editId} == ${usage.id}" th:action="@{/report}" method="post" style="display:inline;">
+              <input type="hidden" name="editId" th:value="${usage.id}" />
+              <button type="submit" class="btn">Edit</button>
+            </form>
+            <form th:action="@{/report/delete}" method="post" style="display:inline;">
+              <input type="hidden" name="deleteId" th:value="${usage.id}" />
+              <button type="submit" class="btn" style="background:#e74c3c;">Delete</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span th:if="${success}" style="color:green;">Update successful!</span>
+    <span th:if="${error}" style="color:red;">Operation failed!</span>
+    <a href="/add-usage">Add More Usage</a> | <a href="/">Home</a>
+  </div>
+</body>
+</html>

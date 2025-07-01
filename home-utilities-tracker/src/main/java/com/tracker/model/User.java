@@ -19,6 +19,16 @@ public class User {
 
     private String role;
 
+    // Default constructor
+    public User() {}
+
+    // Constructor for registration
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+        this.role = "USER";
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;

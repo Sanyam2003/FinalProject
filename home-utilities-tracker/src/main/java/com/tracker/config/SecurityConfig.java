@@ -62,7 +62,9 @@ public class SecurityConfig {
                 )
 
                 // enable HTTP Basic so Postman can send credentials
-                .httpBasic(withDefaults());
+                .httpBasic(withDefaults())
+                // enable form login for web-based login
+                .formLogin(withDefaults());
 
         return http.build();
     }
