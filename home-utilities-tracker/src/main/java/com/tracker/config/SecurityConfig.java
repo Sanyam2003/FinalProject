@@ -22,12 +22,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/usage/all").permitAll()              // No admin, so allow all
+                        .requestMatchers("/api/usage/all").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/usage/update/**").authenticated()
                         .requestMatchers("/api/usage/my-usage").authenticated()
                         .requestMatchers("/api/usage/**").permitAll()
-                        // Removed admin and admin role lines
                         .requestMatchers("/api/user/**").authenticated()
                         .anyRequest().authenticated()                                // Everything else requires login
                 );
