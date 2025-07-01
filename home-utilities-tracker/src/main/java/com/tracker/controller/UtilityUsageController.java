@@ -20,32 +20,29 @@ public class UtilityUsageController {
     private UtilityUsageService utilityUsageService;
 
     @Autowired
-    private UserService userService;  // ✅ You missed this, which is why userService is red
+    private UserService userService;
 
-    // ✅ Add usage entry by userId
+    // ✅ Add usage (logged-in user only)
     @PostMapping("/add")
-    public ResponseEntity<UtilityUsage> addUsage(@RequestParam Long userId, @RequestBody UtilityUsage usage) {
-        UtilityUsage saved = utilityUsageService.addUsage(userId, usage);
+    public ResponseEntity<UtilityUsage> addUsage(@RequestBody UtilityUsage usage, Principal principal) {
+        String email = principal.getName();
+        User user = userService.findByEmail(email);
+
+        usage.setUser(user);
+        UtilityUsage saved = utilityUsageService.addUsage(user.getId(), usage);
         return ResponseEntity.ok(saved);
     }
 
-    // View all usage data by specific user
-    @GetMapping("/user/{userId}")
-    public List<UtilityUsage> getUsage(@PathVariable Long userId) {
-        return utilityUsageService.getUsageByUser(userId);
-    }
-
-    // Update usage by ID (user only)
+    // ✅ Update usage (logged-in user only)
     @PutMapping("/update/{usageId}")
-    public ResponseEntity<?> updateUsage(
-            @PathVariable Long usageId,
-            @RequestBody UtilityUsage updatedUsage,
-            Principal principal) {
-
+    public ResponseEntity<?> updateUsage(@PathVariable Long usageId, @RequestBody UtilityUsage updatedUsage, Principal principal) {
         String loggedInEmail = principal.getName();
         UtilityUsage existingUsage = utilityUsageService.getUsageById(usageId);
-        String ownerEmail = existingUsage.getUser().getEmail();
+        if (existingUsage == null) {
+            return ResponseEntity.notFound().build();
+        }
 
+        String ownerEmail = existingUsage.getUser().getEmail();
         if (!loggedInEmail.equals(ownerEmail)) {
             return ResponseEntity.status(403).body("Access Denied: You cannot update others' data.");
         }
@@ -54,14 +51,26 @@ public class UtilityUsageController {
         return ResponseEntity.ok(updated);
     }
 
-    // Delete usage
+    // ✅ Delete usage (logged-in user only)
     @DeleteMapping("/delete/{usageId}")
-    public ResponseEntity<Void> deleteUsage(@PathVariable Long usageId) {
+    public ResponseEntity<?> deleteUsage(@PathVariable Long usageId, Principal principal) {
+        UtilityUsage usage = utilityUsageService.getUsageById(usageId);
+        if (usage == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String loggedInEmail = principal.getName();
+        String ownerEmail = usage.getUser().getEmail();
+
+        if (!loggedInEmail.equals(ownerEmail)) {
+            return ResponseEntity.status(403).body("Access Denied: Not your record");
+        }
+
         utilityUsageService.deleteUsage(usageId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Deleted successfully");
     }
 
-    // ✅ Logged-in user can see only their entries
+    // ✅ View your own usage
     @GetMapping("/my-usage")
     public ResponseEntity<List<UtilityUsage>> getMyUsage(Authentication authentication) {
         String email = authentication.getName();
@@ -69,6 +78,7 @@ public class UtilityUsageController {
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
+
         List<UtilityUsage> usageList = utilityUsageService.getUsageByUser(user.getId());
         return ResponseEntity.ok(usageList);
     }

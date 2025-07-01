@@ -3,6 +3,8 @@ package com.tracker.controller;
 import com.tracker.model.User;
 import com.tracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController // ✅ Replaces @Controller + @ResponseBody on every method
@@ -13,31 +15,38 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user) {
-        userService.registerUser(user);
-        return "User registered successfully!";
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+        try {
+            userService.registerUser(user);
+            return ResponseEntity.ok("User registered successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestParam String email,
-                            @RequestParam String password) {
+    public ResponseEntity<?> loginUser(@RequestParam String email, @RequestParam String password) {
         boolean isValid = userService.validateCredentials(email, password);
         if (isValid) {
-            return "Login successful!";
+            return ResponseEntity.ok("Login successful!");
         } else {
-            return "Invalid email or password!";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password!");
         }
     }
 
     @PutMapping("/update-email")
-    public String updateEmail(@RequestParam Long userId, @RequestParam String newEmail) {
+    public ResponseEntity<?> updateEmail(@RequestParam Long userId, @RequestParam String newEmail) {
         boolean updated = userService.updateEmail(userId, newEmail);
-        return updated ? "Email updated successfully!" : "Failed to update email.";
+        return updated ?
+            ResponseEntity.ok("Email updated successfully!") :
+            ResponseEntity.badRequest().body("Failed to update email.");
     }
 
     @PutMapping("/update-password")
-    public String updatePassword(@RequestParam Long userId, @RequestParam String newPassword) {
+    public ResponseEntity<?> updatePassword(@RequestParam Long userId, @RequestParam String newPassword) {
         boolean updated = userService.updatePassword(userId, newPassword);
-        return updated ? "Password updated successfully!" : "Failed to update password.";
+        return updated ?
+            ResponseEntity.ok("Password updated successfully!") :
+            ResponseEntity.badRequest().body("Failed to update password.");
     }
 }
