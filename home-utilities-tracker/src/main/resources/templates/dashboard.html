@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Welcome to Your Dashboard</h1>
+
+<ul>
+    <li><a th:href="@{/add-usage}">Create Data (Add Usage)</a></li>
+    <li><a th:href="@{/report}">View Data (Usage Report)</a></li>
+</ul>
+
+<form th:action="@{/logout}" method="post" style="margin-top:20px;">
+    <button type="submit" style="background:none;border:1px solid #007bff;color:#007bff;cursor:pointer;text-decoration:underline;padding:8px 16px;border-radius:4px;">Logout</button>
+</form>
+</body>
+</html>

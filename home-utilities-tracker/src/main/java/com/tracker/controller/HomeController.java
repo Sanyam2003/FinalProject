@@ -21,10 +21,21 @@ public class HomeController {
     @Autowired
     private UtilityUsageService utilityUsageService;
 
-    @GetMapping({"/", "/login"})
-    public String loginPage() {
-        return "index";
-    }
+//    //already in Auth Controller
+//    @GetMapping({"/", "/login"})
+//    public String loginPage() {
+//        return "login";
+//    }
+
+//    @GetMapping("/summary")
+//    public String summaryPage(Model model, Principal principal) {
+//        if (principal != null) {
+//            User user = userService.findByEmail(principal.getName());
+//            model.addAttribute("usages", utilityUsageService.getUsageByUser(user.getId()));
+//            return "usage_list";
+//        }
+//        return "redirect:/login";
+//    }
 
     @GetMapping("/add-usage")
     public String addUsagePage(Model model) {
@@ -62,6 +73,6 @@ public class HomeController {
         } catch (Exception e) {
             model.addAttribute("registerError", true);
         }
-        return "index";
+        return "login";
     }
 }

@@ -9,8 +9,10 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -26,6 +28,8 @@ public class SecurityConfig {
     @Bean
     public org.springframework.security.crypto.password.PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance(); // Use plain text passwords for development/testing
+//        return new BCryptPasswordEncoder(); // ye actual production ke lie
+
     }
 
     // 2) Tell Spring Security to use your UserDetailsService + encoder
@@ -37,35 +41,29 @@ public class SecurityConfig {
         return auth;
     }
 
-    // 3) The filter chain: permit /api/auth/** to register/login, but require Basic auth on your usage endpoints
+    // 3) The filter chain: permit login, register, auth, and static resources; require authentication for all else; use custom login page and redirect to /summary after login; set logout redirect.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // plug in your DaoAuthenticationProvider
-                .authenticationProvider(authenticationProvider())
-
-                // disable CSRF for simplicity (since you're using a pure API + BasicAuth)
-                .csrf(csrf -> csrf.disable())
-
-                // configure URL authorization
-                .authorizeHttpRequests(authorize -> authorize
-                        // allow anyone to hit your auth endpoints
-                        .requestMatchers("/api/auth/**").permitAll()
-
-                        // lock down usage endpoints to authenticated users
-                        .requestMatchers(HttpMethod.POST,   "/api/usage/add").authenticated()
-                        .requestMatchers(HttpMethod.GET,    "/api/usage/my-usage").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/usage/delete/**").authenticated()
-
-                        // (optionally) allow other URLs through
-                        .anyRequest().permitAll()
-                )
-
-                // enable HTTP Basic so Postman can send credentials
-                .httpBasic(withDefaults())
-                // enable form login for web-based login
-                .formLogin(withDefaults());
-
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/login", "/register", "/api/auth/**", "/css/**", "/js/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/dashboard", true)
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+            );
         return http.build();
     }
+
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        return new HiddenHttpMethodFilter();    // 👈 Enables _method override for PUT, DELETE
+    }
+
 }

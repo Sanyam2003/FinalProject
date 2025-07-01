@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController // ✅ Replaces @Controller + @ResponseBody on every method
+@RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -38,15 +38,15 @@ public class AuthController {
     public ResponseEntity<?> updateEmail(@RequestParam Long userId, @RequestParam String newEmail) {
         boolean updated = userService.updateEmail(userId, newEmail);
         return updated ?
-            ResponseEntity.ok("Email updated successfully!") :
-            ResponseEntity.badRequest().body("Failed to update email.");
+                ResponseEntity.ok("Email updated successfully!") :
+                ResponseEntity.badRequest().body("Failed to update email.");
     }
 
     @PutMapping("/update-password")
     public ResponseEntity<?> updatePassword(@RequestParam Long userId, @RequestParam String newPassword) {
         boolean updated = userService.updatePassword(userId, newPassword);
         return updated ?
-            ResponseEntity.ok("Password updated successfully!") :
-            ResponseEntity.badRequest().body("Failed to update password.");
+                ResponseEntity.ok("Password updated successfully!") :
+                ResponseEntity.badRequest().body("Failed to update password.");
     }
 }

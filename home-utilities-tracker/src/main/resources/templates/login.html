@@ -23,17 +23,18 @@
       <input type="password" id="password" name="password" required autocomplete="current-password"><br>
       <button type="submit" class="btn">Login</button>
     </form>
+    <p>Don't have an account? <a th:href="@{/register}">Register here</a>.</p>
     <hr>
-    <form th:action="@{/register}" method="post">
-      <h2>Register</h2>
-      <label for="regEmail">Email:</label>
-      <input type="email" id="regEmail" name="email" required autocomplete="username"><br>
-      <label for="regPassword">Password:</label>
-      <input type="password" id="regPassword" name="password" required autocomplete="new-password"><br>
-      <button type="submit" class="btn">Register</button>
-      <span th:if="${registerSuccess}" style="color:green;">Registration successful! Please login.</span>
-      <span th:if="${registerError}" style="color:red;">Registration failed!</span>
-    </form>
+<!--    <form th:action="@{/register}" method="post">-->
+<!--      <h2>Register</h2>-->
+<!--      <label for="regEmail">Email:</label>-->
+<!--      <input type="email" id="regEmail" name="email" required autocomplete="username"><br>-->
+<!--      <label for="regPassword">Password:</label>-->
+<!--      <input type="password" id="regPassword" name="password" required autocomplete="new-password"><br>-->
+<!--      <button type="submit" class="btn">Register</button>-->
+<!--      <span th:if="${registerSuccess}" style="color:green;">Registration successful! Please login.</span>-->
+<!--      <span th:if="${registerError}" style="color:red;">Registration failed!</span>-->
+<!--    </form>-->
   </div>
 </body>
 </html>

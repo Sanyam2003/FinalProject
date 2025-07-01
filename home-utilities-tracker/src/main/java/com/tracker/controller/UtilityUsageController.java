@@ -10,7 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/usage")
@@ -34,22 +36,31 @@ public class UtilityUsageController {
     }
 
     // ✅ Update usage (logged-in user only)
-    @PutMapping("/update/{usageId}")
-    public ResponseEntity<?> updateUsage(@PathVariable Long usageId, @RequestBody UtilityUsage updatedUsage, Principal principal) {
-        String loggedInEmail = principal.getName();
-        UtilityUsage existingUsage = utilityUsageService.getUsageById(usageId);
-        if (existingUsage == null) {
-            return ResponseEntity.notFound().build();
+    @PutMapping("/usage/update/{id}")
+    public String updateUsage(@PathVariable Long id,
+                              @RequestParam Map<String, String> params,
+                              Principal principal) {
+
+        String email = principal.getName();
+        UtilityUsage existing = utilityUsageService.getUsageById(id);
+
+        if (!existing.getUser().getEmail().equals(email)) {
+            return "redirect:/report?error=unauthorized";
         }
 
-        String ownerEmail = existingUsage.getUser().getEmail();
-        if (!loggedInEmail.equals(ownerEmail)) {
-            return ResponseEntity.status(403).body("Access Denied: You cannot update others' data.");
-        }
+        // Update fields manually from param map
+        existing.setAppliance(params.get("appliance_" + id));
+        existing.setUtilityType(params.get("utilityType_" + id));
+        existing.setSubCategory(params.get("subCategory_" + id));
+        existing.setUnitsUsed(Double.parseDouble(params.get("unitsUsed_" + id)));
+        existing.setUsageCost(Double.parseDouble(params.get("usageCost_" + id)));
+        existing.setDate(LocalDate.parse(params.get("date_" + id)));
+        existing.setNotes(params.get("notes_" + id));
 
-        UtilityUsage updated = utilityUsageService.updateUsageById(usageId, updatedUsage);
-        return ResponseEntity.ok(updated);
+        utilityUsageService.updateUsageById(id, existing);
+        return "redirect:/report?success=updated";
     }
+
 
     // ✅ Delete usage (logged-in user only)
     @DeleteMapping("/delete/{usageId}")
