@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Update Profile</h2>
+
+    <form th:action="@{/profile/update-email}" method="post">
+        <label>New Email:</label>
+        <input type="email" name="newEmail" required>
+        <button type="submit">Update Email</button>
+    </form>
+
+    <br/>
+
+    <form th:action="@{/profile/update-password}" method="post">
+        <label>New Password:</label>
+        <input type="password" name="newPassword" required>
+        <button type="submit">Update Password</button>
+    </form>
+
+    <br/>
+    <a href="/">Back to Dashboard</a>
+</div>
+</body>
+</html>
