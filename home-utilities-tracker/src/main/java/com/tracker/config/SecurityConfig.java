@@ -27,9 +27,7 @@ public class SecurityConfig {
     // 1) Password encoder for your users
     @Bean
     public org.springframework.security.crypto.password.PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // Use plain text passwords for development/testing
-//        return new BCryptPasswordEncoder(); // ye actual production ke lie
-
+        return new BCryptPasswordEncoder(); // Use BCrypt for secure password hashing
     }
 
     // 2) Tell Spring Security to use your UserDetailsService + encoder

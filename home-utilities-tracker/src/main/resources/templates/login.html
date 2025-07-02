@@ -16,7 +16,7 @@
     </div>
 
     <!-- Login error/success -->
-    <div th:if="${param.error}" class="message error">Invalid credentials!</div>
+    <div th:if="${param.error}" class="invalid-credentials-message">Invalid credentials!</div>
     <div th:if="${param.logout}" class="logout-success-message">You have been logged out.</div>
 
     <!-- Login form -->
