@@ -3,78 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <title>My Utility Usage Report</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<div class="container">
-  <h2>My Utility Usage Report</h2>
-
-  <table id="usageTable" border="1">
-    <thead>
-    <tr>
-      <th>Appliance</th>
-      <th>Utility Type</th>
-      <th>Sub Category</th>
-      <th>Units Used</th>
-      <th>Usage Cost</th>
-      <th>Date</th>
-      <th>Notes</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="usage : ${usages}">
-      <th:block th:if="${editId} == ${usage.id}">
-        <form th:id="'editForm_' + ${usage.id}" th:action="@{/report}" method="post">
-          <input type="hidden" name="editId" th:value="${usage.id}" />
-          <td><input type="text" name="appliance" th:value="${usage.appliance}" required /></td>
-          <td>
-            <select name="utilityType">
-              <option value="Electricity" th:selected="${usage.utilityType == 'Electricity'}">Electricity</option>
-              <option value="Water" th:selected="${usage.utilityType == 'Water'}">Water</option>
-              <option value="Gas" th:selected="${usage.utilityType == 'Gas'}">Gas</option>
-            </select>
-          </td>
-          <td><input type="text" name="subCategory" th:value="${usage.subCategory}" required /></td>
-          <td><input type="number" name="unitsUsed" th:value="${usage.unitsUsed}" step="0.1" required /></td>
-          <td><input type="number" name="usageCost" th:value="${usage.usageCost}" step="0.01" required /></td>
-          <td><input type="date" name="date" th:value="${usage.date}" required /></td>
-          <td><input type="text" name="notes" th:value="${usage.notes}" /></td>
-          <td>
-            <button type="submit" class="btn">Save</button>
-            <a th:href="@{/report}" class="btn">Cancel</a>
-          </td>
-        </form>
-      </th:block>
-      <th:block th:unless="${editId} == ${usage.id}">
-        <td th:text="${usage.appliance}"></td>
-        <td th:text="${usage.utilityType}"></td>
-        <td th:text="${usage.subCategory}"></td>
-        <td th:text="${usage.unitsUsed}"></td>
-        <td th:text="${usage.usageCost}"></td>
-        <td th:text="${usage.date}"></td>
-        <td th:text="${usage.notes}"></td>
-        <td>
-          <form th:action="@{/report}" method="post" style="display:inline;">
-            <input type="hidden" name="editId" th:value="${usage.id}" />
-            <button type="submit" class="btn">Edit</button>
-          </form>
-          <form th:action="@{/report/delete}" method="post" style="display:inline;">
-            <input type="hidden" name="deleteId" th:value="${usage.id}" />
-            <button type="submit" class="btn" style="background:#e74c3c;">Delete</button>
-          </form>
-        </td>
-      </th:block>
-    </tr>
-    </tbody>
-  </table>
-
-  <!-- Success/Error Message -->
-  <span th:if="${success}" style="color:green;">Update successful!</span>
-  <span th:if="${error}" style="color:red;">Operation failed!</span>
-
-  <!-- Bottom navigation -->
-  <a href="/add-usage">Add More Usage</a> | <a href="/">Home</a>
+<div class="login-wrapper">
+  <div class="login-card" style="max-width:900px;width:98%;padding:32px 18px;">
+    <div class="login-header">
+      <img src="/icons/images.png" alt="logo" class="logo">
+      <h2>My Utility Usage Report</h2>
+      <p>View, edit, or delete your past usage entries below.</p>
+    </div>
+    <div style="overflow-x:auto;width:100%;">
+      <table id="usageTable" style="width:100%;border-collapse:separate;border-spacing:0 8px;background:none;">
+        <thead>
+        <tr style="background:#e6e6fa;">
+          <th>Appliance</th>
+          <th>Utility Type</th>
+          <th>Sub Category</th>
+          <th>Units Used</th>
+          <th>Usage Cost</th>
+          <th>Date</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="usage : ${usages}">
+          <th:block th:if="${editId} == ${usage.id}">
+            <form th:id="'editForm_' + ${usage.id}" th:action="@{/report}" method="post">
+              <input type="hidden" name="editId" th:value="${usage.id}" />
+              <td><input type="text" name="appliance" th:value="${usage.appliance}" class="usage-input" required /></td>
+              <td>
+                <select name="utilityType" class="usage-input select-utility-type">
+                  <option value="Electricity" th:selected="${usage.utilityType == 'Electricity'}">Electricity</option>
+                  <option value="Water" th:selected="${usage.utilityType == 'Water'}">Water</option>
+                  <option value="Gas" th:selected="${usage.utilityType == 'Gas'}">Gas</option>
+                </select>
+              </td>
+              <td><input type="text" name="subCategory" th:value="${usage.subCategory}" class="usage-input" required /></td>
+              <td><input type="number" name="unitsUsed" th:value="${usage.unitsUsed}" class="usage-input" step="0.1" required /></td>
+              <td><input type="number" name="usageCost" th:value="${usage.usageCost}" class="usage-input" step="0.01" required /></td>
+              <td><input type="date" name="date" th:value="${usage.date}" class="usage-input" required /></td>
+              <td><input type="text" name="notes" th:value="${usage.notes}" class="usage-input" /></td>
+              <td style="min-width:120px;">
+                <button type="submit" class="btn table-action">Save</button>
+                <a th:href="@{/report}" class="btn table-action">Cancel</a>
+              </td>
+            </form>
+          </th:block>
+          <th:block th:unless="${editId} == ${usage.id}">
+            <td th:text="${usage.appliance}"></td>
+            <td th:text="${usage.utilityType}"></td>
+            <td th:text="${usage.subCategory}"></td>
+            <td th:text="${usage.unitsUsed}"></td>
+            <td th:text="${usage.usageCost}"></td>
+            <td th:text="${usage.date}"></td>
+            <td th:text="${usage.notes}"></td>
+            <td style="min-width:120px;">
+              <form th:action="@{/report}" method="post" style="display:inline;">
+                <input type="hidden" name="editId" th:value="${usage.id}" />
+                <button type="submit" class="btn table-action">Edit</button>
+              </form>
+              <form th:action="@{/report/delete}" method="post" style="display:inline;">
+                <input type="hidden" name="deleteId" th:value="${usage.id}" />
+                <button type="submit" class="btn table-action" style="background:#e74c3c;">Delete</button>
+              </form>
+            </td>
+          </th:block>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <span th:if="${success}" class="message success">Update successful!</span>
+    <span th:if="${error}" class="message error">Operation failed!</span>
+    <div class="register" style="margin-top:18px;">
+      <a href="/add-usage">Add More Usage</a> | <a href="/dashboard">Back to Dashboard</a>
+    </div>
+  </div>
 </div>
 </body>
 </html>

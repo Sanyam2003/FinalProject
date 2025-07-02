@@ -1,20 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<h1>Welcome to Your Dashboard</h1>
-
-<ul>
-    <li><a th:href="@{/add-usage}">Create Data (Add Usage)</a></li>
-    <li><a th:href="@{/report}">View Data (Usage Report)</a></li>
-</ul>
-
-<a href="/profile">Update Profile</a>
-
-<form th:action="@{/logout}" method="post" style="margin-top:20px;">
-    <button type="submit" style="background:none;border:1px solid #007bff;color:#007bff;cursor:pointer;text-decoration:underline;padding:8px 16px;border-radius:4px;">Logout</button>
-</form>
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <img src="/icons/images.png" alt="logo" class="logo">
+      <h1>Welcome to Your Dashboard</h1>
+      <p>Manage your home utilities and track your usage easily!</p>
+    </div>
+    <ul class="dashboard-links">
+      <li>
+        <a th:href="@{/add-usage}" class="dashboard-btn">
+          <span class="dashboard-icon">➕</span>
+          <span>Create Data<br><small>(Add Usage)</small></span>
+        </a>
+      </li>
+      <li>
+        <a th:href="@{/report}" class="dashboard-btn">
+          <span class="dashboard-icon">📊</span>
+          <span>View Data<br><small>(Usage Report)</small></span>
+        </a>
+      </li>
+      <li>
+        <a th:href="@{/profile}" class="dashboard-btn">
+          <span class="dashboard-icon">👤</span>
+          <span>Update Profile</span>
+        </a>
+      </li>
+    </ul>
+    <form th:action="@{/logout}" method="post" style="margin-top:10px;width:100%;">
+      <button type="submit" class="btn" style="background:#fff;color:#1976d2;border:1px solid #1976d2;">Logout</button>
+    </form>
+  </div>
+</div>
 </body>
 </html>
