@@ -4,39 +4,81 @@
   <meta charset="UTF-8">
   <title>Add Utility Usage</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
   <div class="login-wrapper">
-    <div class="login-card">
-      <div class="login-header">
-        <img src="/icons/images.png" alt="logo" class="logo">
-        <h2>Add Utility Usage</h2>
-        <p>Log your appliance usage and keep track of your spending!</p>
+    <div class="login-card dashboard-card" style="color:#fff;background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15);box-shadow:0 25px 45px rgba(0,0,0,0.3),0 0 0 1px rgba(255,255,255,0.08),inset 0 1px 0 rgba(255,255,255,0.1);">
+      <div class="login-header dashboard-header">
+        <div class="logo" style="width:30%;margin:0 auto;display:flex;justify-content:center;align-items:center;">
+          <img src="/icons/newData.png" alt="logo" style="width:100%;height:auto;max-width:120px;border-radius:12px;background:none;box-shadow:none;">
+        </div>
+        <h1 style="color:#fff;">Add Utility Usage</h1>
+        <p style="color:#fff;">Log your appliance usage and keep track of your spending!</p>
       </div>
       <form th:action="@{/add-usage}" th:object="${usage}" method="post" style="width:100%;text-align:left;">
-        <label for="appliance">Appliance</label>
-        <input type="text" id="appliance" th:field="*{appliance}" class="usage-input" required>
-        <label for="utilityType">Utility Type</label>
-        <select id="utilityType" th:field="*{utilityType}" class="usage-input select-utility-type">
-          <option value="Electricity">Electricity</option>
-          <option value="Water">Water</option>
-          <option value="Gas">Gas</option>
-        </select>
-        <label for="subCategory">Sub Category</label>
-        <input type="text" id="subCategory" th:field="*{subCategory}" class="usage-input" required>
-        <label for="unitsUsed">Units Used</label>
-        <input type="number" id="unitsUsed" th:field="*{unitsUsed}" class="usage-input" step="0.1" required>
-        <label for="usageCost">Usage Cost (₹)</label>
-        <input type="number" id="usageCost" th:field="*{usageCost}" class="usage-input" step="0.01" required>
-        <label for="date">Date</label>
-        <input type="date" id="date" th:field="*{date}" class="usage-input" required>
-        <label for="notes">Notes</label>
-        <textarea id="notes" th:field="*{notes}" class="usage-input" placeholder="Optional comments..."></textarea>
-        <button type="submit" class="btn">Submit</button>
-        <span th:if="${success}" class="usage-success-message">Usage added!</span>
+        <div class="form-group">
+          <label for="appliance" class="input-label">Appliance</label>
+          <div class="input-wrapper">
+            <input type="text" id="appliance" th:field="*{appliance}" class="usage-input" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="utilityType" class="input-label">Utility Type</label>
+          <div class="input-wrapper">
+            <select id="utilityType" th:field="*{utilityType}" class="usage-input select-utility-type">
+              <option value="Electricity">Electricity</option>
+              <option value="Water">Water</option>
+              <option value="Gas">Gas</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subCategory" class="input-label">Sub Category</label>
+          <div class="input-wrapper">
+            <input type="text" id="subCategory" th:field="*{subCategory}" class="usage-input" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="unitsUsed" class="input-label">Units Used</label>
+          <div class="input-wrapper">
+            <input type="number" id="unitsUsed" th:field="*{unitsUsed}" class="usage-input" step="0.1" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="usageCost" class="input-label">Usage Cost (₹)</label>
+          <div class="input-wrapper">
+            <input type="number" id="usageCost" th:field="*{usageCost}" class="usage-input" step="0.01" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="date" class="input-label">Date</label>
+          <div class="input-wrapper">
+            <input type="date" id="date" th:field="*{date}" class="usage-input" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="notes" class="input-label">Notes</label>
+          <div class="input-wrapper">
+            <textarea id="notes" th:field="*{notes}" class="usage-input" placeholder="Optional comments..."></textarea>
+          </div>
+        </div>
+        <button type="submit" class="login-button" style="width:65%;display:block;margin:0 auto 10px auto;">Submit</button>
+        <span th:if="${success}" class="usage-success-message success-toast" style="display:block;width:75%;margin:0 auto;text-align:center;line-height:1.6;padding:6px 0;min-height:auto;"> <span class="success-icon">✔️</span> Usage added!</span>
         <span th:if="${error}" style="color:red;display:block;margin-top:10px;">Failed to add usage!</span>
       </form>
-      <div class="register" style="margin-top:18px;"><a href="/dashboard">Back to Dashboard</a></div>
+      <div class="register back-dashboard-btn" style="margin-top:18px;text-align:center;">
+        <a href="/dashboard" style="display:block;width:90%;max-width:340px;margin:0 auto;text-align:center;text-decoration:none;color:#fff;" class="login-button"><span class="back-icon">⬅️</span> Back to Dashboard</a>
+      </div>
     </div>
   </div>
 </body>

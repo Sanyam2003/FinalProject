@@ -4,37 +4,43 @@
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<div class="particles">
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+</div>
 <div class="login-wrapper">
-  <div class="login-card">
-    <div class="login-header">
-      <img src="/icons/images.png" alt="logo" class="logo">
-      <h1>Welcome to Your Dashboard</h1>
-      <p>Manage your home utilities and track your usage easily!</p>
+  <div class="login-card dashboard-card" style="color:#fff;background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15);box-shadow:0 25px 45px rgba(0,0,0,0.3),0 0 0 1px rgba(255,255,255,0.08),inset 0 1px 0 rgba(255,255,255,0.1);">
+    <div class="login-header dashboard-header">
+      <div class="logo" style="width:30%;margin:0 auto;display:flex;justify-content:center;align-items:center;">
+        <img src="/icons/login.png" alt="logo" style="width:100%;height:auto;max-width:110px;border-radius:12px;background:none;box-shadow:none;">
+      </div>
+      <h1 style="color:#fff;">Welcome to Your Dashboard</h1>
+      <p style="color:#fff;">Manage your home utilities and track your usage easily!</p>
     </div>
-    <ul class="dashboard-links">
-      <li>
-        <a th:href="@{/add-usage}" class="dashboard-btn">
-          <span class="dashboard-icon">➕</span>
-          <span>Create Data<br><small>(Add Usage)</small></span>
-        </a>
-      </li>
-      <li>
-        <a th:href="@{/report}" class="dashboard-btn">
-          <span class="dashboard-icon">📊</span>
-          <span>View Data<br><small>(Usage Report)</small></span>
-        </a>
-      </li>
-      <li>
-        <a th:href="@{/profile}" class="dashboard-btn">
-          <span class="dashboard-icon">👤</span>
-          <span>Update Profile</span>
-        </a>
-      </li>
-    </ul>
-    <form th:action="@{/logout}" method="post" style="margin-top:10px;width:100%;">
-      <button type="submit" class="btn" style="background:#fff;color:#1976d2;border:1px solid #1976d2;">Logout</button>
+    <div class="dashboard-links">
+      <a th:href="@{/add-usage}" class="dashboard-btn create-btn">
+        <span class="dashboard-icon">➕</span>
+        <span>Create Data<br><small>(Add Usage)</small></span>
+      </a>
+      <a th:href="@{/report}" class="dashboard-btn view-btn">
+        <span class="dashboard-icon">📊</span>
+        <span>View Data<br><small>(Usage Report)</small></span>
+      </a>
+      <a th:href="@{/profile}" class="dashboard-btn update-btn">
+        <span class="dashboard-icon">👤</span>
+        <span>Update Profile</span>
+      </a>
+    </div>
+    <form th:action="@{/logout}" method="post" style="margin-top:24px;width:100%;">
+      <button type="submit" class="login-button" style="background:linear-gradient(135deg,#fff 0%,#e6e6e6 100%);color:#1976d2;border:1px solid #1976d2;">Logout</button>
     </form>
   </div>
 </div>

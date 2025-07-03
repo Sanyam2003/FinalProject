@@ -4,34 +4,76 @@
   <meta charset="UTF-8">
   <title>Home Utilities Tracker - Login</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<div class="particles">
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+</div>
 
 <div class="login-wrapper">
   <div class="login-card">
     <div class="login-header">
-      <img src="/icons/images.png" alt="logo" class="logo">
+      <div class="logo" style="width:30%;margin:0 auto;display:flex;justify-content:center;align-items:center;">
+        <img src="/icons/login.png" alt="logo" style="width:100%;height:auto;max-width:120px;border-radius:12px;background:none;box-shadow:none;">
+      </div>
       <h1>Home Utilities Tracker</h1>
       <p>Track appliance usage smartly!</p>
     </div>
 
-    <!-- Login error/success -->
-    <div th:if="${param.error}" class="invalid-credentials-message">Invalid credentials!</div>
-    <div th:if="${param.logout}" class="logout-success-message">You have been logged out.</div>
+    <!-- Login error/success messages -->
+    <div class="invalid-credentials-message message" th:if="${param.error}" id="error-message">
+      Invalid credentials! Please try again.
+    </div>
+    <div class="logout-success-message message" th:if="${param.logout}" id="success-message">
+      You have been logged out successfully.
+    </div>
 
     <!-- Login form -->
-    <form th:action="@{/login}" method="post">
-      <label for="email" class="input-label">Email:</label>
-      <input type="text" id="email" name="username" placeholder="Email" required autocomplete="username">
-      <label for="password" class="input-label">Password:</label>
-      <input type="password" id="password" name="password" placeholder="Password" required autocomplete="current-password">
-      <button type="submit">Login</button>
+    <form th:action="@{/login}" method="post" id="loginForm">
+      <div class="form-group">
+        <label for="email" class="input-label">Email Address</label>
+        <div class="input-wrapper">
+          <input type="text" id="email" name="username" placeholder="Enter your email" required autocomplete="username">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password" class="input-label">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+        </div>
+      </div>
+      <button type="submit" class="login-button" id="loginBtn">
+        <span>Sign In</span>
+      </button>
     </form>
 
     <!-- Register link -->
-    <div class="register">Don’t have an account? <a th:href="@{/register}">Register here</a>.</div>
+    <div class="register">
+      Don't have an account? <a th:href="@{/register}">Create one here</a>
+    </div>
   </div>
 </div>
+
+<script>
+  // Add subtle input animations
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.style.transform = 'scale(1.02)';
+    });
+    input.addEventListener('blur', function() {
+      this.parentElement.style.transform = 'scale(1)';
+    });
+  });
+</script>
 
 </body>
 </html>
