@@ -94,8 +94,6 @@ home-utilities-tracker/
 ## Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-## License
-This project is licensed under the MIT License.
 
 ## Acknowledgements
 - [Spring Boot](https://spring.io/projects/spring-boot)
@@ -105,5 +103,5 @@ This project is licensed under the MIT License.
 - [Lombok](https://projectlombok.org/)
 
 ---
-**Developed by:** Your Name / Team
+**Developed by:** Sanyam Pandita
 
